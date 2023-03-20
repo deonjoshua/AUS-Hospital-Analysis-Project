@@ -33,4 +33,4 @@ You can test the application by running the following in your command line.
 
 - This starter code uses a .sqlite file as the database.
 
-- To see all the data in the database, navigate to the API, http://127.0.0.1:5000/api/.
+- To see all the data in the database, navigate to the API, http://127.0.0.1:5000/api/hospitals.
