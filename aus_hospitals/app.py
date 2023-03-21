@@ -59,13 +59,13 @@ def home():
 # create API route
 @app.route("/api/hospitals")
 def hospitals():
-
     results1 = db.session.query(Hospitals.Hospital_ID, Hospitals.Hospital_Name, Hospitals.Latitude, Hospitals.Longitude, Hospitals.State, Hospitals.Peer_group_name, Hospitals.No_of_presentations, Hospitals.Median_time_in_ED).all()
-    
-    data = {result[0]: {} for result in results1}
-    
+
+    data = {}
+
     for result in results1:
         data[result[0]] = {
+            "Hospital_ID": result[0],
             "Hospital_Name": result[1],
             "Latitude": result[2],
             "Longitude": result[3],
@@ -73,18 +73,18 @@ def hospitals():
             "Peer_group_name": result[5],
             "ED_waiting":{ "No_of_Patients": result[6],
                            "Median_time_in_ED": result[7]
-                          }
+                        }
         }
 
     results2 = db.session.query(Triage.Hospital_ID, Triage.Triage_ID, Triage.Triage_category, Triage.treatment_required_in, Triage.No_of_presentations, Triage.Percentage_of_patients_seen_on_time).all()
     
     for result in results2:
-        data[result[0]][result[2]] = {"treatment_required_in":result[3],
-                                      "No_of_Patients":result[4],
-                                      "seen_on_time":result[5]
-                                      }
-
-    json_data = json.dumps(data, sort_keys=False)
+            data[result[0]][result[2]] = {"treatment_required_in":result[3],
+                                                  "No_of_Patients":result[4],
+                                                  "seen_on_time":result[5]
+                                        }
+            
+    json_data = json.dumps(list(data.values()), sort_keys=False)
     response = Response(json_data, mimetype='application/json')
     return response
 
