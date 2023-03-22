@@ -246,10 +246,10 @@ d3.json(url).then(function (response) {
         barChart = new Chart(canvas2, {
           type: 'bar',        
           data: {
-            labels: ['Total ED Patents', 'Total ED Patents Seen On Time'],
+            labels: ['Total ED Patients', 'Total ED Patients Seen On Time'],
             datasets: [
               {
-                label: 'Total Patiens vs Patients Seen on Time',
+                label : "Total ED Patients",
                 backgroundColor: ['rgba(255, 99, 132, 0.2)','rgba(54, 162, 235, 0.2)'],
                 borderColor: ['rgba(255, 99, 132, 1)','rgba(54, 162, 235, 1)'],
                 borderWidth: 1,
@@ -430,10 +430,10 @@ d3.json(url).then(function (response) {
         barChart = new Chart(canvas2, {
           type: 'bar',
           data: {
-            labels: ['Total ED Patents', 'Total ED Patents Seen On Time'],
+            labels: ['Total ED Patients', 'Total ED Patients Seen On Time'],
             datasets: [
               {
-                label: 'Total Patiens vs Patients Seen on Time',
+                label: 'Total Patients vs Patients Seen on Time',
                 backgroundColor: ['rgba(255, 99, 132, 0.2)','rgba(54, 162, 235, 0.2)'],
                 borderColor: ['rgba(255, 99, 132, 1)','rgba(54, 162, 235, 1)'],
                 borderWidth: 1,
@@ -533,6 +533,45 @@ let overlays = {
   };
 
 L.control.layers(null, overlays).addTo(map);
+let info = L.control({
+  position: "bottomright"
+});
+
+info.onAdd = function() {
+  let div = L.DomUtil.create("div", "legend");
+  return div;
+};
+
+info.addTo(map);
+
+var redIcon = L.icon({
+  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+  iconSize: [20, 30],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+var orangeIcon = L.icon({
+  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+  iconSize: [20, 30],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+var yellowIcon = L.icon({
+  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+  iconSize: [20, 30],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+var greenIcon = L.icon({
+  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  iconSize: [20, 30],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
 
 d3.json(url).then(function(data) {
     let state;
@@ -561,13 +600,33 @@ d3.json(url).then(function(data) {
         else {
             state='WA';
         }
-
+        if (data[i]['ED_waiting']['Median_time_in_ED'] <= 1.0){
+          icon = greenIcon;
+        }
+        else if (data[i]['ED_waiting']['Median_time_in_ED'] > 1.0 && data[i]['ED_waiting']['Median_time_in_ED'] <= 2.0){
+          icon = yellowIcon;
+        }
+        else if (data[i]['ED_waiting']['Median_time_in_ED'] > 2.0 && data[i]['ED_waiting']['Median_time_in_ED'] <= 3.0){
+          icon = orangeIcon;
+        }
+        else {
+          icon = redIcon;
+        }
         let newMarker = L.marker([data[i]['Latitude'], data[i]['Longitude']]);
-
+        newMarker.setIcon(icon)
         newMarker.addTo(layers[state]);
-
+        newMarker.on('mouseover',function(ev) {
+          newMarker.openPopup();
+        });
+        newMarker.on('mouseout', function(ev) {
+          newMarker.closePopup();
+        });
         newMarker.bindPopup(data[i]['Hospital_Name'] + "<br>" + data[i]['State'] + "<br> Peer Group: " + data[i]['Peer_group_name'] + "<br> No. of Patients(2021): " + data[i]['ED_waiting']['No_of_Patients'] + "<br> Median time in ED(Hrs): " + data[i]['ED_waiting']['Median_time_in_ED']);
     }
-
+    document.querySelector(".legend").innerHTML = [
+      "<p class='red'>>3 Hrs</p>",
+      "<p class='orange'>2-3 Hrs</p>",
+      "<p class='yellow'>1-2 Hrs</p>",
+      "<p class='green'><1 Hr</p>"
+    ].join("");
 });
-
