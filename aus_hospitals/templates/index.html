@@ -45,7 +45,9 @@
           
 
         <div class="jumbotron jumbotron-fluid" style="text-align: center">
-            <h1>Australian Public Hospitals </h1><br><h3>Emergency Department Dashboard (2021)</h3>
+            <h1>Australian Public Hospitals </h1><br><h3>Emergency Department Dashboard (2021)</h3><br>
+            <h6>To be classed as "Seen on Time", patients must be seen as per the following definitions:</h6>
+            <h6>Resuscitation: 2mins, Emergency: 10mins, Urgent: 30min, Semi-Urgent: 60mins, Non-Urgent: 120mins</h6>
         </div>
 
         <div class="row">
@@ -53,14 +55,14 @@
                 <div class="well">
                     <h6>State</h6>
                    <select id="selDataset"></select>
-                   <div class="pb-5"></div>
+                   
                 </div>
             </div> 
             <div class="col-md-3">
                 <div class="well">
                     <h6>Patient Total Less Than</h6>
                    <select id="selTotal"></select>
-                   <div class="pb-5"></div>
+                   
                 </div>
             </div> 
             <div class="col-md-2">
@@ -76,16 +78,45 @@
                    <div class="pb-5"></div>
                 </div>
             </div> 
-            
-        </div>
-
+           
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body" style="text-align: center">
+                          <h5 class="card-text">Median Wait Time Per Hospital</h5>
+                        </div>
+                      </div>              
+                </div>            
+            </div>
+        
         <div class="row">
             <div class="col-md-12">
-              <!-- The div that holds our bubble chart -->
-              <div id="bubble"></div>
-              <div class="pb-5"></div>
+                <!-- The div that holds our bubble chart -->
+                <div id="bubble" class="bubble-chart-container"></div>
+                
             </div>            
         </div>
+
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body" style="text-align: center">
+                      <h5 class="card-text">Total Patients vs Patients Seen on Time </h5>
+                    </div>
+                  </div>              
+            </div>
+            <div class="col-md-4">
+              <!-- The div that holds our pie chart -->
+              <div class="card">
+                <div class="card-body" style="text-align: center">
+                  <h5 class="card-text">Patent Categorisation</h5>
+                </div>
+              </div>                            
+            </div>
+          </div>      
+        </div>
+        
 
         <div class="row">
             <div class="col-md-8">

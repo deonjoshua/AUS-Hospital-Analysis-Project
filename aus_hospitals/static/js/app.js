@@ -244,11 +244,12 @@ d3.json(url).then(function (response) {
       } else {
       
         barChart = new Chart(canvas2, {
-          type: 'bar',
+          type: 'bar',        
           data: {
-            labels: ['Total ED Waiting', 'Total ED Seen'],
+            labels: ['Total ED Patents', 'Total ED Patents Seen On Time'],
             datasets: [
               {
+                label: 'Total Patiens vs Patients Seen on Time',
                 backgroundColor: ['rgba(255, 99, 132, 0.2)','rgba(54, 162, 235, 0.2)'],
                 borderColor: ['rgba(255, 99, 132, 1)','rgba(54, 162, 235, 1)'],
                 borderWidth: 1,
@@ -257,6 +258,10 @@ d3.json(url).then(function (response) {
             ]
           },
           options: {
+            title: {
+              display: true,
+              text: 'TEST'
+          },
             legend: {
                display: false
             }},
@@ -425,10 +430,10 @@ d3.json(url).then(function (response) {
         barChart = new Chart(canvas2, {
           type: 'bar',
           data: {
-            labels: ['Total ED Waiting', 'Total ED Seen'],
+            labels: ['Total ED Patents', 'Total ED Patents Seen On Time'],
             datasets: [
               {
-                label: ['ED Waiting','ED Seen'],
+                label: 'Total Patiens vs Patients Seen on Time',
                 backgroundColor: ['rgba(255, 99, 132, 0.2)','rgba(54, 162, 235, 0.2)'],
                 borderColor: ['rgba(255, 99, 132, 1)','rgba(54, 162, 235, 1)'],
                 borderWidth: 1,
@@ -438,6 +443,9 @@ d3.json(url).then(function (response) {
             ],           
         },
         options: {
+          title: {
+            display: true,
+            text: 'TEST'},
           legend: {
             display: false
           },
