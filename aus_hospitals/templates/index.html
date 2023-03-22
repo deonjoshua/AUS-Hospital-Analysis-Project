@@ -5,41 +5,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Page Title</title>
+    <title>Aus Emergency Hospital Dashboard</title>
     <!-- D3 library -->
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- Plotly -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    
+    <!-- Chart.js-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
     <div class="container">
 
-        <div class="jumbotron" style="text-align: center">
-            <h1>Page Heading</h1>
+       <!-- Navbar -->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Aus Emergency Hospital Dashboard</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="http://127.0.0.1:5000/">Plots</a></li>
+                <li><a href="http://127.0.0.1:5000/map">Map</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+  <!-- Navbar -->
+          
+
+        <div class="jumbotron jumbotron-fluid" style="text-align: center">
+            <h1>Australian Public Hospitals </h1><br><h3>Emergency Department Dashboard (2021)</h3>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <div class="well">
+                    <h6>State</h6>
+                   <select id="selDataset"></select>
+                   <div class="pb-5"></div>
+                </div>
+            </div> 
+            <div class="col-md-3">
+                <div class="well">
+                    <h6>Patient Total Less Than</h6>
+                   <select id="selTotal"></select>
+                   <div class="pb-5"></div>
+                </div>
+            </div> 
+            <div class="col-md-2">
+                <div class="well">
+                    <h6>Wait Time Less Than</h6>
+                   <select id="selWait"></select>
+                </div>
+            </div> 
+            <div class="col-md-5">
+                <div class="well">
+                    <h6>Hospital</h6>
+                   <select id="selHospital"></select>
+                   <div class="pb-5"></div>
+                </div>
+            </div> 
+            
         </div>
 
         <div class="row">
             <div class="col-md-12">
-                <!-- The div that holds our map -->
-                <div id="map"></div>
-            </div>
+              <!-- The div that holds our bubble chart -->
+              <div id="bubble"></div>
+              <div class="pb-5"></div>
+            </div>            
         </div>
-        
+
         <div class="row">
-            <div class="col-md-12">
-                <!-- The div that holds our bar chart -->
-                <div id="bar"></div>
+            <div class="col-md-8">
+              <!-- The div that holds our bubble chart -->
+              <canvas id="barchart"></canvas>
+              <div class="pb-5"></div>
             </div>
+            <div class="col-md-4">
+              <!-- The div that holds our pie chart -->
+              <canvas id="myChart"></canvas>
+              <div class="pb-5"></div>
+              
+            </div>
+          </div>      
         </div>
 
     </div>
 
     <!-- Our JavaScript file -->
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    
 </body>
 
 </html>

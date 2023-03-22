@@ -90,15 +90,7 @@ def hospitals():
 
 @app.route('/map')
 def map():
-    results1 = db.session.query(Hospitals.Hospital_ID, Hospitals.Hospital_Name, Hospitals.Latitude, Hospitals.Longitude, Hospitals.State, Hospitals.Peer_group_name, Hospitals.No_of_presentations, Hospitals.Median_time_in_ED).all()
-    markers=[]
-        
-    for result in results1:
-        
-        markers.append({'lat': result[2],
-                        'lon': result[3],
-                        'popup':result[1]})
-    return render_template('map.html',markers=markers )
+    return render_template('map.html')
 
 if __name__ == "__main__":
     app.debug = True
