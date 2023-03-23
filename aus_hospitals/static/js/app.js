@@ -543,7 +543,7 @@ let stateLayers = {
 var colorLayers = {
   "Less Than 1 hr": colours.LessThan1,
   "1 hr - 2 hr": colours.OneTwohr,
-  "2hr - 3hr": colours.TwoThreehr,
+  "2 hr - 3 hr": colours.TwoThreehr,
   "Greater Than 3 hr": colours.MoreThan3
 };
 
@@ -620,7 +620,7 @@ d3.json(url).then(function(data) {
       }
       else if (data[i]['ED_waiting']['Median_time_in_ED'] > 2.0 && data[i]['ED_waiting']['Median_time_in_ED'] <= 3.0){
         icon = orangeIcon;
-        colorLayer = "2hr - 3hr";
+        colorLayer = "2 hr - 3 hr";
       }
       else {
         icon = redIcon;
