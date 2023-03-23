@@ -506,123 +506,149 @@ d3.json(url).then(function (response) {
 })
 
 let layers = {
-    NSW: new L.LayerGroup(),
-    VIC: new L.LayerGroup(),
-    QLD: new L.LayerGroup(),
-    SA: new L.LayerGroup(),
-    TAS: new L.LayerGroup(),
-    NT: new L.LayerGroup(),
-    ACT: new L.LayerGroup(),
-    WA: new L.LayerGroup()
-  };
+  NSW: new L.LayerGroup(),
+  VIC: new L.LayerGroup(),
+  QLD: new L.LayerGroup(),
+  SA: new L.LayerGroup(),
+  TAS: new L.LayerGroup(),
+  NT: new L.LayerGroup(),
+  ACT: new L.LayerGroup(),
+  WA: new L.LayerGroup()
+};
 
-var map = L.map('map', {center: [-28.397842, 133.285763], zoom: 5, layers: [layers.NSW, layers.VIC, layers.QLD, layers.SA, layers.TAS, layers.NT, layers.ACT, layers.WA]});
+let colours = {
+LessThan1:new L.LayerGroup(),
+OneTwohr : new L.LayerGroup(),
+TwoThreehr: new L.LayerGroup(),
+MoreThan3:new L.LayerGroup(),
+
+}
+
+var map = L.map('map', {center: [-28.397842, 133.285763], zoom: 5, layers: [layers.NSW, layers.VIC, layers.QLD, layers.SA, layers.TAS, layers.NT, layers.ACT, layers.WA, colours.LessThan1, colours.OneTwohr, colours.TwoThreehr,colours.MoreThan3]});
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-let overlays = {
-    "NSW": layers.NSW,
-    "VIC": layers.VIC,
-    "QLD": layers.QLD,
-    "SA": layers.SA,
-    "TAS": layers.TAS,
-    "NT": layers.NT,
-    "ACT": layers.ACT,
-    "WA": layers.WA
-  };
+let stateLayers = {
+  "NSW": layers.NSW,
+  "VIC": layers.VIC,
+  "QLD": layers.QLD,
+  "SA": layers.SA,
+  "TAS": layers.TAS,
+  "NT": layers.NT,
+  "ACT": layers.ACT,
+  "WA": layers.WA
+};
 
-L.control.layers(null, overlays).addTo(map);
+var colorLayers = {
+  "Less Than 1 hr": colours.LessThan1,
+  "1 hr - 2 hr": colours.OneTwohr,
+  "2hr - 3hr": colours.TwoThreehr,
+  "Greater Than 3 hr": colours.MoreThan3
+};
+
+// Add both overlay groups to the map
+L.control.layers(null, stateLayers, {collapsed: false}).addTo(map);
+L.control.layers(null, colorLayers, {collapsed: false}).addTo(map);
+
 
 var redIcon = L.icon({
-  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-  iconSize: [25, 40],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+iconSize: [25, 40],
+iconAnchor: [12, 41],
+popupAnchor: [1, -34],
+shadowSize: [41, 41]
 });
 var orangeIcon = L.icon({
-  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
-  iconSize: [25, 40],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+iconSize: [25, 40],
+iconAnchor: [12, 41],
+popupAnchor: [1, -34],
+shadowSize: [41, 41]
 });
 var yellowIcon = L.icon({
-  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
-  iconSize: [25, 40],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+iconSize: [25, 40],
+iconAnchor: [12, 41],
+popupAnchor: [1, -34],
+shadowSize: [41, 41]
 });
 var greenIcon = L.icon({
-  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-  iconSize: [25, 40],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+iconSize: [25, 40],
+iconAnchor: [12, 41],
+popupAnchor: [1, -34],
+shadowSize: [41, 41]
 });
 
 d3.json(url).then(function(data) {
-    let state;
-    for (let i = 0; i < data.length; i++) {
-        if (data[i]['State']==='NSW'){
-            state='NSW';
-        }
-        else if (data[i]['State']==='VIC'){
-            state='VIC';
-        }
-        else if (data[i]['State']==='QLD'){
-            state='QLD';
-        }
-        else if (data[i]['State']==='SA'){
-            state='SA';
-        }
-        else if (data[i]['State']==='TAS'){
-            state='TAS';
-        }
-        else if (data[i]['State']==='NT'){
-            state='NT';
-        }
-        else if (data[i]['State']==='ACT'){
-            state='ACT';
-        }
-        else {
-            state='WA';
-        }
-        if (data[i]['ED_waiting']['Median_time_in_ED'] <= 1.0){
-          icon = greenIcon;
-        }
-        else if (data[i]['ED_waiting']['Median_time_in_ED'] > 1.0 && data[i]['ED_waiting']['Median_time_in_ED'] <= 2.0){
-          icon = yellowIcon;
-        }
-        else if (data[i]['ED_waiting']['Median_time_in_ED'] > 2.0 && data[i]['ED_waiting']['Median_time_in_ED'] <= 3.0){
-          icon = orangeIcon;
-        }
-        else {
-          icon = redIcon;
-        }
-        let newMarker = L.marker([data[i]['Latitude'], data[i]['Longitude']]);
-        newMarker.setIcon(icon)
-        newMarker.addTo(layers[state]);
-        newMarker.on("mouseover", function() {
-          var pos = map.latLngToLayerPoint(newMarker.getLatLng());
-          pos.y -= 10;
-          var fx = new L.PosAnimation();
+  let state;
+  let colorLayer;
+  for (let i = 0; i < data.length; i++) {
+      if (data[i]['State']==='NSW'){
+          state='NSW';
+      }
+      else if (data[i]['State']==='VIC'){
+          state='VIC';
+      }
+      else if (data[i]['State']==='QLD'){
+          state='QLD';
+      }
+      else if (data[i]['State']==='SA'){
+          state='SA';
+      }
+      else if (data[i]['State']==='TAS'){
+          state='TAS';
+      }
+      else if (data[i]['State']==='NT'){
+          state='NT';
+      }
+      else if (data[i]['State']==='ACT'){
+          state='ACT';
+      }
+      else {
+          state='WA';
+      }
+
+      if (data[i]['ED_waiting']['Median_time_in_ED'] <= 1.0){
+        icon = greenIcon;
+        colorLayer = "Less Than 1 hr";
+      }
+      else if (data[i]['ED_waiting']['Median_time_in_ED'] > 1.0 && data[i]['ED_waiting']['Median_time_in_ED'] <= 2.0){
+        icon = yellowIcon;
+        colorLayer = "1 hr - 2 hr";
+      }
+      else if (data[i]['ED_waiting']['Median_time_in_ED'] > 2.0 && data[i]['ED_waiting']['Median_time_in_ED'] <= 3.0){
+        icon = orangeIcon;
+        colorLayer = "2hr - 3hr";
+      }
+      else {
+        icon = redIcon;
+        colorLayer = "Greater Than 3 hr";
+      }
       
-          fx.once('end',function() {
-              pos.y += 10;
-              fx.run(newMarker._icon, pos, 0.5);
-          });
-      
-          fx.run(newMarker._icon, pos, 0.5);
+      let newMarker = L.marker([data[i]['Latitude'], data[i]['Longitude']]);
+      newMarker.setIcon(icon);
+      newMarker.addTo(layers[state]);
+      colorLayers[colorLayer].addLayer(newMarker);
+      newMarker.on("mouseover", function() {
+        var pos = map.latLngToLayerPoint(newMarker.getLatLng());
+        pos.y -= 10;
+        var fx = new L.PosAnimation();
+    
+        fx.once('end',function() {
+            pos.y += 10;
+            fx.run(newMarker._icon, pos, 0.5);
+        });
+    
+        fx.run(newMarker._icon, pos, 0.5);
+    });
+      newMarker.on('mouseover',function(ev) {
+        newMarker.openPopup();
       });
-        newMarker.on('mouseover',function(ev) {
-          newMarker.openPopup();
-        });
-        newMarker.on('mouseout', function(ev) {
-          newMarker.closePopup();
-        });
-        newMarker.bindPopup("<strong>" + data[i]['Hospital_Name'] + "</strong>" + "<br>" + "<em>" + data[i]['State'] + "</em>" + "<br> Peer Group: " + "<b>" + data[i]['Peer_group_name'] + "</b>" + "<br> No. of Patients(2021): " + "<b>" + data[i]['ED_waiting']['No_of_Patients'].toLocaleString('en-US') + "</b>" + "<br> Median time in ED(Hrs): " + "<b>" + data[i]['ED_waiting']['Median_time_in_ED'] + "</b>");
-    }
+      newMarker.on('mouseout', function(ev) {
+        newMarker.closePopup();
+      });
+      newMarker.bindPopup("<strong>" + data[i]['Hospital_Name'] + "</strong>" + "<br>" + "<em>" + data[i]['State'] + "</em>" + "<br> Peer Group: " + "<b>" + data[i]['Peer_group_name'] + "</b>" + "<br> No. of Patients(2021): " + "<b>" + data[i]['ED_waiting']['No_of_Patients'].toLocaleString('en-US') + "</b>" + "<br> Median time in ED(Hrs): " + "<b>" + data[i]['ED_waiting']['Median_time_in_ED'] + "</b>");
+  }
 });
