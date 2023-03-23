@@ -516,7 +516,7 @@ let layers = {
     WA: new L.LayerGroup()
   };
 
-var map = L.map('map', {center: [-24.8501, 133.2455], zoom: 5, layers: [layers.NSW, layers.VIC, layers.QLD, layers.SA, layers.TAS, layers.NT, layers.ACT, layers.WA]});
+var map = L.map('map', {center: [-28.397842, 133.285763], zoom: 5, layers: [layers.NSW, layers.VIC, layers.QLD, layers.SA, layers.TAS, layers.NT, layers.ACT, layers.WA]});
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
@@ -533,41 +533,31 @@ let overlays = {
   };
 
 L.control.layers(null, overlays).addTo(map);
-let info = L.control({
-  position: "bottomright"
-});
-
-info.onAdd = function() {
-  let div = L.DomUtil.create("div", "legend");
-  return div;
-};
-
-info.addTo(map);
 
 var redIcon = L.icon({
   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-  iconSize: [20, 30],
+  iconSize: [25, 40],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
 var orangeIcon = L.icon({
   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
-  iconSize: [20, 30],
+  iconSize: [25, 40],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
 var yellowIcon = L.icon({
   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
-  iconSize: [20, 30],
+  iconSize: [25, 40],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
 var greenIcon = L.icon({
   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-  iconSize: [20, 30],
+  iconSize: [25, 40],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
@@ -615,18 +605,24 @@ d3.json(url).then(function(data) {
         let newMarker = L.marker([data[i]['Latitude'], data[i]['Longitude']]);
         newMarker.setIcon(icon)
         newMarker.addTo(layers[state]);
+        newMarker.on("mouseover", function() {
+          var pos = map.latLngToLayerPoint(newMarker.getLatLng());
+          pos.y -= 10;
+          var fx = new L.PosAnimation();
+      
+          fx.once('end',function() {
+              pos.y += 10;
+              fx.run(newMarker._icon, pos, 0.5);
+          });
+      
+          fx.run(newMarker._icon, pos, 0.5);
+      });
         newMarker.on('mouseover',function(ev) {
           newMarker.openPopup();
         });
         newMarker.on('mouseout', function(ev) {
           newMarker.closePopup();
         });
-        newMarker.bindPopup(data[i]['Hospital_Name'] + "<br>" + data[i]['State'] + "<br> Peer Group: " + data[i]['Peer_group_name'] + "<br> No. of Patients(2021): " + data[i]['ED_waiting']['No_of_Patients'] + "<br> Median time in ED(Hrs): " + data[i]['ED_waiting']['Median_time_in_ED']);
+        newMarker.bindPopup("<strong>" + data[i]['Hospital_Name'] + "</strong>" + "<br>" + "<em>" + data[i]['State'] + "</em>" + "<br> Peer Group: " + "<b>" + data[i]['Peer_group_name'] + "</b>" + "<br> No. of Patients(2021): " + "<b>" + data[i]['ED_waiting']['No_of_Patients'].toLocaleString('en-US') + "</b>" + "<br> Median time in ED(Hrs): " + "<b>" + data[i]['ED_waiting']['Median_time_in_ED'] + "</b>");
     }
-    document.querySelector(".legend").innerHTML = [
-      "<p class='red'>>3 Hrs</p>",
-      "<p class='orange'>2-3 Hrs</p>",
-      "<p class='yellow'>1-2 Hrs</p>",
-      "<p class='green'><1 Hr</p>"
-    ].join("");
 });
